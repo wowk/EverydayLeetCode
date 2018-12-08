@@ -28,56 +28,45 @@ class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
         int val = 0;
+        int carry = 0;
         ListNode result(0);
         ListNode* ptr = &result;
-
-        while(l1 && l2){
-            val += l1->val + l2->val;
-            if(val >= 10){
-                val -= 10;
-                ptr->next = new ListNode(val);
-                val = 1;
-            }else{
-                ptr->next = new ListNode(val);
-                val = 0;
-            }
+        
+        while(l1){
+            ptr->next = new ListNode(l1->val);
             ptr = ptr->next;
             l1 = l1->next;
+        }
+
+        ptr = &result;
+
+        while(l2){
+            if(ptr->next == NULL){
+                ptr->next = new ListNode(0);
+            }
+            ptr->next->val += l2->val + carry;
+            if(ptr->next->val >= 10){
+                carry = 1;
+                ptr->next->val -= 10;
+            }else{
+                carry = 0;
+            }
+            ptr = ptr->next;
             l2 = l2->next;
         }
 
-        if(l1){
-            while(l1){
-                val += l1->val;
-                if(val >= 10){
-                    val -= 10;
-                    ptr->next = new ListNode(val);
-                    val = 1;
-                }else{
-                    ptr->next = new ListNode(val);
-                    val = 0;
-                }
-                ptr = ptr->next;
-                l1 = l1->next;
+        while(carry){
+            if(ptr->next == NULL){
+                ptr->next = new ListNode(0);
             }
-        }else if(l2){
-            while(l2){
-               val += l2->val;
-               if(val >= 10){
-                   val -= 10;
-                   ptr->next = new ListNode(val);
-                   val = 1;
-               }else{
-                   ptr->next = new ListNode(val);
-                   val = 0;
-               }
-               ptr = ptr->next;
-               l2 = l2->next;
-           }        
-        }
-
-        if(val){
-            ptr->next = new ListNode(1);
+            ptr->next->val += carry;
+            if(ptr->next->val >= 10){
+                carry = 1;
+                ptr->next->val -= 10;
+            }else{
+                carry = 0;
+            }
+            ptr = ptr->next;
         }
 
         return result.next;
@@ -86,9 +75,10 @@ public:
 
 int main(void)
 {
-    ListNode* l1 = new ListNode(1);
-    ListNode* l2 = new ListNode(9);
-    l2->next = new ListNode(9);
+    ListNode* l1 = new ListNode(9);
+    l1->next = new ListNode(8);
+
+    ListNode* l2 = new ListNode(1);
 
     ListNode* result = Solution().addTwoNumbers(l1, l2);
 
