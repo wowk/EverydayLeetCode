@@ -27,16 +27,11 @@ struct ListNode {
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        int val = 0;
         int carry = 0;
         ListNode result(0);
         ListNode* ptr = &result;
         
-        while(l1){
-            ptr->next = new ListNode(l1->val);
-            ptr = ptr->next;
-            l1 = l1->next;
-        }
+        ptr->next = l1;
 
         ptr = &result;
 
