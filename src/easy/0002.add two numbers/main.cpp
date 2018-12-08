@@ -29,39 +29,61 @@ public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
         int carry = 0;
         ListNode result(0);
-        ListNode* ptr = &result;
+        ListNode* ptr1;
+        ListNode* ptr2;
+
+        int l1_len = 0;
+        ptr1 = l1;
+        while(ptr1){
+            l1_len ++;
+            ptr1 = ptr1->next;
+        }
         
-        ptr->next = l1;
+        int l2_len = 0;
+        ptr2 = l2;
+        while(ptr2){
+            l2_len ++;
+            ptr2 = ptr2->next;
+        }
 
-        ptr = &result;
+        if(l2_len > l1_len){
+            ptr1 = l2;
+            ptr2 = l1;
+        }else{
+            ptr1 = l1;
+            ptr2 = l2;
+        }
 
-        while(l2){
-            if(ptr->next == NULL){
-                ptr->next = new ListNode(0);
+        result.next = ptr1;
+        ptr1 = &result;
+
+        while(ptr2){
+            if(ptr1->next == NULL){
+                ptr1->next = ptr2;
             }
-            ptr->next->val += l2->val + carry;
-            if(ptr->next->val >= 10){
+            ptr1->next->val += ptr2->val + carry;
+            if(ptr1->next->val >= 10){
                 carry = 1;
-                ptr->next->val -= 10;
+                ptr1->next->val -= 10;
             }else{
                 carry = 0;
             }
-            ptr = ptr->next;
-            l2 = l2->next;
+            ptr1 = ptr1->next;
+            ptr2 = ptr2->next;
         }
 
         while(carry){
-            if(ptr->next == NULL){
-                ptr->next = new ListNode(0);
+            if(ptr1->next == NULL){
+                ptr1->next = new ListNode(0);
             }
-            ptr->next->val += carry;
-            if(ptr->next->val >= 10){
+            ptr1->next->val += carry;
+            if(ptr1->next->val >= 10){
                 carry = 1;
-                ptr->next->val -= 10;
+                ptr1->next->val -= 10;
             }else{
                 carry = 0;
             }
-            ptr = ptr->next;
+            ptr1 = ptr1->next;
         }
 
         return result.next;
